@@ -51,20 +51,18 @@ describe('RoomFinder', () => {
         };
         const returnValue = [
             { 
-                roomId: '100',
-                roomBuildingAndNumber: 'TEST 100',
-                whyIsRoomIdHereTwice: '??',
-                available: true
+                room_id: '100',
+                room_building_and_number: 'TEST 100',
+                is_available: true
             }, {
-                roomId: '200',
-                roomBuildingAndNumber: 'TEST 200',
-                whyIsRoomIdHereTwice: '??',
-                available: false
+                room_id: '200',
+                room_building_and_number: 'TEST 200',
+                is_available: false
             }
         ];
         const startTime = mockOffice.values.context.mailbox.item.start.getAsync((x) => encodeURIComponent(moment(x.value).format('YYYY-MM-DDTHH:mm:ss')));
         const endTime = mockOffice.values.context.mailbox.item.end.getAsync((x) => encodeURIComponent(moment(x.value).format('YYYY-MM-DDTHH:mm:ss')));
-        const url = `${props.apiBasePath}/spaces/rooms/availability?start=${startTime}&end=${endTime}`;
+        const url = `${props.apiBasePath}/spaces/rooms/availability?start_datetime=${startTime}&end_datetime=${endTime}`;
 
         mockAxios.onGet(url).reply(200, returnValue);
 
@@ -87,15 +85,13 @@ describe('RoomFinder', () => {
         };
         const returnValue = [
             { 
-                roomId: '100',
-                roomBuildingAndNumber: 'TEST 100',
-                whyIsRoomIdHereTwice: '??',
-                available: true
+                room_id: '100',
+                room_building_and_number: 'TEST 100',
+                is_available: true
             }, {
-                roomId: '200',
-                roomBuildingAndNumber: 'TEST 200',
-                whyIsRoomIdHereTwice: '??',
-                available: false
+                room_id: '200',
+                room_building_and_number: 'TEST 200',
+                is_available: false
             }
         ];
 
@@ -106,7 +102,7 @@ describe('RoomFinder', () => {
         let userEmail = officeItem.organizer.getAsync((x) => x.value.emailAddress);
         let subject = `${officeItem.subject.getAsync((x) => x.value)} (via Outlook)`;
         
-        const url = `${props.apiBasePath}/spaces/rooms/availability?start=${encodeURIComponent(startTime)}&end=${encodeURIComponent(endTime)}`;
+        const url = `${props.apiBasePath}/spaces/rooms/availability?start_datetime=${encodeURIComponent(startTime)}&end_datetime=${encodeURIComponent(endTime)}`;
         mockAxios.onGet(url).reply(200, returnValue);
 
         const roomFinder = await shallow(<RoomFinder {...props} />);
@@ -114,8 +110,8 @@ describe('RoomFinder', () => {
         await waitForState(roomFinder, state => state.roomData.length === returnValue.length && state.isLoading === false);
 
         const room = returnValue[0];
-        const postUrl = `${props.apiBasePath}/spaces/rooms/${room.roomId}/reservation`;
-        mockAxios.onPost(postUrl).reply(200, { data: { eventId: uuidv4() }});
+        const postUrl = `${props.apiBasePath}/spaces/rooms/${room.room_id}/reservation`;
+        mockAxios.onPost(postUrl).reply(200, { data: { event_id: uuidv4() }});
 
         // Select a room
         const settings = {};
@@ -132,9 +128,13 @@ describe('RoomFinder', () => {
 
         expect(mockAxios.history.post.length).toBe(1);
         expect(mockAxios.history.post[0].data).toBe(JSON.stringify({ 
-            name: subject, userName, userEmail, start: moment(startTime).format('YYYY-MM-DD HH:mm'), end: moment(endTime).format('YYYY-MM-DD HH:mm')
+            event_name: subject, 
+            requester_name: userName, 
+            requester_email: userEmail, 
+            event_start_time: moment(startTime).format('YYYY-MM-DD HH:mm'), 
+            event_end_time: moment(endTime).format('YYYY-MM-DD HH:mm')
         }));
         expect(onBookRoomSuccessful).toHaveBeenCalledTimes(1);
-        expect(roomSelectedOfficeMock.values.context.mailbox.item.location.setAsync).toHaveBeenCalledWith(room.roomBuildingAndNumber, expect.any(Function));
+        expect(roomSelectedOfficeMock.values.context.mailbox.item.location.setAsync).toHaveBeenCalledWith(room.room_building_and_number, expect.any(Function));
     });
 });

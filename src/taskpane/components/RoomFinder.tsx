@@ -161,14 +161,14 @@ export default class RoomFinder extends React.Component<IRoomFinderProps, IRoomF
         isBooking: false,
         hasError: false,
       });
-      that.addRoomToMeeting(roomInfo.roomBuildingAndNumber);
+      that.addRoomToMeeting(roomInfo.room_building_and_number);
     }, 4000)
   }
 
   bookRoomOnServer = async (roomInfo, _startTime, _endTime) => {
     var that = this;
     this.setState({isBooking: true});
-    var url = `${this.props.apiBasePath}/spaces/rooms/${roomInfo.roomId}/reservation`;
+    var url = `${this.props.apiBasePath}/spaces/rooms/${roomInfo.room_id}/reservation`;
 
     const start = moment(this.state.startTime).format('YYYY-MM-DD HH:mm');
     const end = moment(this.state.endTime).format('YYYY-MM-DD HH:mm');
@@ -210,9 +210,9 @@ export default class RoomFinder extends React.Component<IRoomFinderProps, IRoomF
             isBooking: false,
             hasError: false,
           });
-          that.addRoomToMeeting(roomInfo.roomBuildingAndNumber);
+          that.addRoomToMeeting(roomInfo.room_building_and_number);
           this.props.onBookRoomSuccessful(
-            roomInfo.roomBuildingAndNumber,
+            roomInfo.room_building_and_number,
             moment(this.state.startTime).format('dddd, MMMM Do YYYY'),
             moment(this.state.startTime).format('LT'),
             moment(this.state.endTime).format('LT'),
@@ -225,13 +225,13 @@ export default class RoomFinder extends React.Component<IRoomFinderProps, IRoomF
       this.setState({hasError: true});
       console.log(error);
 
-      that.addRoomToMeeting(roomInfo.roomBuildingAndNumber);
+      that.addRoomToMeeting(roomInfo.room_building_and_number);
     }
   }
 
   onBookRoom = async () => {
     let roomInfo = Office.context.roamingSettings.get(SELECTED_ROOM_SETTING);
-    if (roomInfo && roomInfo.roomBuildingAndNumber) {
+    if (roomInfo && roomInfo.room_building_and_number) {
       var startTime = encodeURIComponent(moment(this.state.startTime).format('YYYY-MM-DDTHH:mm:ss'));
       var endTime = encodeURIComponent(moment(this.state.endTime).format('YYYY-MM-DDTHH:mm:ss'));
 
