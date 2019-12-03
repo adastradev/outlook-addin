@@ -95,7 +95,7 @@ export default class RoomFinder extends React.Component<IRoomFinderProps, IRoomF
   retrieveRoomsFromServer = async (startTime, endTime) => {
     var that = this;
     that.setState({isLoading: true});
-    var url = `${this.props.apiBasePath}/spaces/rooms/availability?start=${startTime}&end=${endTime}`;
+    var url = `${this.props.apiBasePath}/spaces/rooms/availability?start_datetime=${startTime}&end_datetime=${endTime}`;
     try {
       const response = await axios.get(url);
       that.setState({
@@ -186,7 +186,13 @@ export default class RoomFinder extends React.Component<IRoomFinderProps, IRoomF
             name = `${asyncResult.value} (via Outlook)`;
           }
 
-          const postBody = { name, userName, userEmail, start, end };
+          const postBody = { 
+            event_name: name, 
+            requester_name: userName, 
+            requester_email: userEmail, 
+            event_start_time: start, 
+            event_end_time:  end 
+          };
 
           console.log(`POST URL:   ${url}`);
           console.log(`POST BODY:   ${JSON.stringify(postBody, null, 2)}`);
@@ -195,10 +201,9 @@ export default class RoomFinder extends React.Component<IRoomFinderProps, IRoomF
           console.log(`POST REPONSE: ${JSON.stringify(postResponse, null, 2)}`);
     
           // set event url to postResponse.data.eventId
-          const eventId = postResponse.data.eventId;
+          const eventId = postResponse.data.event_id;
           const astraScheduleInstanceUrl = `https://www.aaiscloud.com/ARCHealthEducation`;
           const astraScheduleEventUrl = `${astraScheduleInstanceUrl}/events/EventForm.aspx?id=${eventId}`;
-          // https://www.aaiscloud.com/ARCHealthEducation/events/EventForm.aspx?id=311ed6cc-5570-44cc-b476-d71af718e76d
     
           that.setState({
             ...that.state,
@@ -295,7 +300,7 @@ export default class RoomFinder extends React.Component<IRoomFinderProps, IRoomF
         { this.state.hasError &&
           <MessageBar className='error-message-bar' messageBarType={MessageBarType.error}
           onDismiss={this.dismissError} isMultiline={false} dismissButtonAriaLabel="Close">
-            This is where we'd book the room in Astra Schedule. We're still working on it!
+            An error occurred while booking your room, please try again later
         </MessageBar>
       }
       </div>
