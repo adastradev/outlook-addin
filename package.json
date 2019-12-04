@@ -1,9 +1,9 @@
 {
-  "name": "office-addin-taskpane-react",
-  "version": "0.0.1",
+  "name": "outlook-addin",
+  "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/OfficeDev/Office-Addin-TaskPane-React.git"
+    "url": "https://github.com/adastradev/outlook-addin.git"
   },
   "license": "MIT",
   "config": {
@@ -17,7 +17,6 @@
     "build-dev": "webpack --mode development --https false && echo . && echo . && echo . && echo Please use 'build:dev' instead of 'build-dev'.",
     "dev-server": "webpack-dev-server --mode development",
     "start": "office-addin-debugging start manifest.xml",
-    "start:alpha": "office-addin-debugging start manifest-alpha.xml",
     "start:localhost": "office-addin-debugging start manifest-debug.xml",
     "start:desktop": "office-addin-debugging start manifest.xml desktop",
     "start:web": "office-addin-debugging start manifest.xml web",

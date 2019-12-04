@@ -163,7 +163,6 @@ export default class App extends React.Component<AppProps, AppState> {
   }
 
   render() {
-
     const {
       isOfficeInitialized,
     } = this.props;

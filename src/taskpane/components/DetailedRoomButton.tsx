@@ -4,10 +4,9 @@ import { Icon } from 'office-ui-fabric-react';
 
 // note: this should match to server definition
 export interface ISourceRoomInfo {
-  roomId: string;
-  roomBuildingAndNumber: string;
-  whyIsRoomIdHereTwice: string;
-  available: boolean;
+  room_id: string;
+  room_building_and_number: string;
+  is_available: boolean;
   capacity?: number;
 }
 
@@ -36,7 +35,7 @@ export class DetailedRoomButton extends React.Component<IRoomButtonProps, IRoomB
         checked={this.state.selected}
         allowDisabledFocus
         onClick={() => this.props.onClickFn(this) }
-        text={this.props.roomInfo.roomBuildingAndNumber}
+        text={this.props.roomInfo.room_building_and_number}
         onRenderDescription={this._onRenderDescription}
         iconProps={{
           iconName: 'Room',
@@ -66,7 +65,7 @@ export class DetailedRoomButton extends React.Component<IRoomButtonProps, IRoomB
     let text = 'Available';
     let style = 'available-text';
 
-    if (props.roomInfo.available === false) {
+    if (props.roomInfo.is_available === false) {
       clockIcon = 'CircleStopSolid';
       text = 'Unavailable';
       style = 'unavailable-text';

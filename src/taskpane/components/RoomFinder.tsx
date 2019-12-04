@@ -14,9 +14,9 @@ import {
   MessageBarType 
 } from 'office-ui-fabric-react';
 import moment from 'moment';
-import { createListItems } from '../../utilities/exampleData';
 import SettingsDialog from './SettingsDialog';
 import { SELECTED_ROOM_SETTING } from '../../utilities/config';
+import { ISourceRoomInfo } from './DetailedRoomButton';
 
 const stackStyles: IStackStyles = {
   root: {
@@ -37,7 +37,7 @@ export interface IRoomFinderState {
   startTime: any;
   endTime: any;
   showUnavailable: boolean;
-  roomData: Array<any>; // is it acceptable for this to be generic or should we pull in IRoomButtonProps
+  roomData: Array<ISourceRoomInfo>;
   settingsDialog?: React.RefObject<SettingsDialog>;
 }
 
@@ -78,24 +78,10 @@ export default class RoomFinder extends React.Component<IRoomFinderProps, IRoomF
     });
   }
 
-  loadRoomsFromExampleData = async () => {
-    var that = this;
-    that.setState({isLoading: true});
-
-    // induce an artificial 2 second delay
-    setTimeout(function() {
-      that.setState({
-        ...that.state,
-        roomData: createListItems(5000),
-        isLoading: false,
-      });
-    }, 2000)
-  }
-
   retrieveRoomsFromServer = async (startTime, endTime) => {
     var that = this;
     that.setState({isLoading: true});
-    var url = `${this.props.apiBasePath}/spaces/rooms/availability?start_datetime=${startTime}&end_datetime=${endTime}`;
+    var url = `${this.props.apiBasePath}/rooms/availability?start_datetime=${startTime}&end_datetime=${endTime}`;
     try {
       const response = await axios.get(url);
       that.setState({
@@ -119,12 +105,8 @@ export default class RoomFinder extends React.Component<IRoomFinderProps, IRoomF
           that.setState({endTime: moment(values[1])});
           var startTime = encodeURIComponent(moment(values[0]).format('YYYY-MM-DDTHH:mm:ss'));
           var endTime = encodeURIComponent(moment(values[1]).format('YYYY-MM-DDTHH:mm:ss'));
-          if (that.props.useSampleData) {
-            // avaiability is reandomized, so not utilizing startTime and endTime params
-            that.loadRoomsFromExampleData();
-          } else {
-            that.retrieveRoomsFromServer(startTime, endTime);
-          }
+
+          that.retrieveRoomsFromServer(startTime, endTime);
         }
         })
       .catch(function(error) {
@@ -168,7 +150,7 @@ export default class RoomFinder extends React.Component<IRoomFinderProps, IRoomF
   bookRoomOnServer = async (roomInfo, _startTime, _endTime) => {
     var that = this;
     this.setState({isBooking: true});
-    var url = `${this.props.apiBasePath}/spaces/rooms/${roomInfo.room_id}/reservation`;
+    var url = `${this.props.apiBasePath}/rooms/${roomInfo.room_id}/reservation`;
 
     const start = moment(this.state.startTime).format('YYYY-MM-DD HH:mm');
     const end = moment(this.state.endTime).format('YYYY-MM-DD HH:mm');

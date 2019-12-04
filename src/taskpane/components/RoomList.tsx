@@ -51,7 +51,7 @@ export default class RoomList extends React.Component<IRoomListProps, IRoomListS
     const { showUnavailable } = this.props;
 
     if (!showUnavailable) {
-      items = items.filter(item => item.available === true);
+      items = items.filter(item => item.is_available === true);
     }
 
     if (items.length > 0) {

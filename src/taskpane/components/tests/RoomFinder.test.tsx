@@ -62,7 +62,7 @@ describe('RoomFinder', () => {
         ];
         const startTime = mockOffice.values.context.mailbox.item.start.getAsync((x) => encodeURIComponent(moment(x.value).format('YYYY-MM-DDTHH:mm:ss')));
         const endTime = mockOffice.values.context.mailbox.item.end.getAsync((x) => encodeURIComponent(moment(x.value).format('YYYY-MM-DDTHH:mm:ss')));
-        const url = `${props.apiBasePath}/spaces/rooms/availability?start_datetime=${startTime}&end_datetime=${endTime}`;
+        const url = `${props.apiBasePath}/rooms/availability?start_datetime=${startTime}&end_datetime=${endTime}`;
 
         mockAxios.onGet(url).reply(200, returnValue);
 
@@ -102,7 +102,7 @@ describe('RoomFinder', () => {
         let userEmail = officeItem.organizer.getAsync((x) => x.value.emailAddress);
         let subject = `${officeItem.subject.getAsync((x) => x.value)} (via Outlook)`;
         
-        const url = `${props.apiBasePath}/spaces/rooms/availability?start_datetime=${encodeURIComponent(startTime)}&end_datetime=${encodeURIComponent(endTime)}`;
+        const url = `${props.apiBasePath}/rooms/availability?start_datetime=${encodeURIComponent(startTime)}&end_datetime=${encodeURIComponent(endTime)}`;
         mockAxios.onGet(url).reply(200, returnValue);
 
         const roomFinder = await shallow(<RoomFinder {...props} />);
@@ -110,7 +110,7 @@ describe('RoomFinder', () => {
         await waitForState(roomFinder, state => state.roomData.length === returnValue.length && state.isLoading === false);
 
         const room = returnValue[0];
-        const postUrl = `${props.apiBasePath}/spaces/rooms/${room.room_id}/reservation`;
+        const postUrl = `${props.apiBasePath}/rooms/${room.room_id}/reservation`;
         mockAxios.onPost(postUrl).reply(200, { data: { event_id: uuidv4() }});
 
         // Select a room
