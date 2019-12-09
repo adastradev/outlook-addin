@@ -133,7 +133,7 @@ export default class App extends React.Component<AppProps, AppState> {
         <main className='ms-welcome__main'>
           <ul className="msms-List ms-welcome__features ms-u-slideUpIn10">
             <li className='ms-ListItem'>
-              <i className="ms-Icon ms-Icon--ForwardEvent"></i>&nbsp;<a className="ms-font-m ms-fontColor-neutralPrimary" href={this.state.scheduleEventUrl}>Open Event in Astra Schedule</a>
+              <i className="ms-Icon ms-Icon--ForwardEvent"></i>&nbsp;<a className="ms-font-m ms-fontColor-neutralPrimary" target="_blank" href={this.state.scheduleEventUrl}>Open Event in Astra Schedule</a>
             </li>
           </ul>
         </main>
