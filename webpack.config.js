@@ -1,87 +1,123 @@
-const devCerts = require("office-addin-dev-certs");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require('webpack');
+const path = require('path');
+const AWS = require('aws-sdk');
+const s3 = new AWS.S3();
 
-module.exports = async (env, options)  => {
-  const dev = options.mode === "development";
-  const config = {
-    devtool: "source-map",
-    entry: {
-      vendor: [
-        'react',
-        'react-dom',
-        'core-js',
-        'office-ui-fabric-react'
-      ],
-      taskpane: [
-          'react-hot-loader/patch',
-          './src/taskpane/index.tsx',
-      ],
-    },
-    resolve: {
-      extensions: [".ts", ".tsx", ".html", ".js"]
-    },
-    module: {
-      rules: [
-        {
-          test: /\.tsx?$/,
-          use: [
+
+module.exports = async (env, argv) => {
+
+  let config = {};
+
+  console.log('Retrieving configuration');
+  await s3.getObject(
+    {
+      // TODO Get this from options
+      Bucket: env.bucket_name, // 'astra-outlook-addin',
+      Key: env.bucket_key // 'tenant_configuration.json'
+    }, 
+    (err, data) => {
+      if (err) {
+        console.error('Failed to retrieve configuration');
+        console.error(err, err.stack);
+      } else {
+        config = JSON.parse(data.Body.toString('UTF-8'));
+      }
+    }
+  ).promise();
+  if(config.tenants !== undefined) {
+    console.log(`Retrieved configuration: ${JSON.stringify(config)}`);
+  }
+
+  return config.tenants.map((tenant) => {   
+    return {
+      name: tenant.instance,
+      devtool: 'source-map',
+      entry: {
+        vendor: [
+          'react',
+          'react-dom',
+          'core-js',
+          'office-ui-fabric-react'
+        ],
+        taskpane: [
+            'react-hot-loader/patch',
+            './src/taskpane/index.tsx',
+        ],
+      },
+        resolve: {
+        extensions: ['.ts', '.tsx', '.html', '.js'],
+      },
+      output: {
+        path: path.resolve(__dirname, `dist/${tenant.instance}`)
+      },
+      module: {
+        rules: [
+          {
+            test: /\.tsx?$/,
+            use: [
               'react-hot-loader/webpack',
               'ts-loader'
-          ],
-          exclude: /node_modules/
-        },
-        {
-          test: /\.css$/,
-          use: ['style-loader', 'css-loader']
-        },
-        {
-          test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
-          use: {
+            ],
+            exclude: /node_modules/
+          },
+          {
+            test: /\.css$/,
+            use: ['style-loader', 'css-loader']
+          },
+          {
+            test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
+            use: {
               loader: 'file-loader',
               query: {
-                  name: 'assets/[name].[ext]'
-                }
-              }  
-            }   
-          ]
-    },    
-    plugins: [
-      new CleanWebpackPlugin(),
-      new CopyWebpackPlugin([
-        {
-          to: "taskpane.css",
-          from: "./src/taskpane/taskpane.css"
-        }
-      ]),
-      new ExtractTextPlugin('[name].[hash].css'),
-      new HtmlWebpackPlugin({
-        filename: "taskpane.html",
-          template: './src/taskpane/taskpane.html',
-          chunks: ['taskpane', 'vendor', 'polyfills']
-      }),
-      new CopyWebpackPlugin([
-          {
-              from: './assets',
-              ignore: ['*.scss'],
-              to: 'assets',
-          }
-      ]),
-      new webpack.ProvidePlugin({
-        Promise: ["es6-promise", "Promise"]
-      })
-    ],
-    devServer: {
-      headers: {
-        "Access-Control-Allow-Origin": "*"
-      },      
-      https: (options.https !== undefined) ? options.https : await devCerts.getHttpsServerOptions(),
-      port: process.env.npm_package_config_dev_server_port || 3000
-    }
-  };
-
-  return config;
-};
+                name: 'assets/[name].[ext]'
+              }
+            }  
+          }   
+        ]
+      },
+      plugins: [
+        new CleanWebpackPlugin(),
+        new webpack.DefinePlugin({
+          __ADDIN_ID__: JSON.stringify(tenant.addinId),
+          __API_BASE_PATH__: JSON.stringify(tenant.bridgeURL),
+          __SCHEDULE_BASE_PATH__: JSON.stringify(config.baseScheduleURL)
+        }),
+        new CopyWebpackPlugin([{ 
+          to: 'taskpane.css', 
+          from: './src/taskpane/taskpane.css' 
+        }]),
+        new ExtractTextPlugin('[name].[hash].css'),
+        new HtmlWebpackPlugin({ 
+          filename: 'taskpane.html', 
+          template: './src/taskpane/taskpane.html', 
+          chunks: ['taskpane', 'vendor', 'polyfills'] 
+        }),
+        new HtmlWebpackPlugin({
+          filename: 'manifest.xml',
+          template: './manifest-template.xml',
+          addinId: tenant.addinId,
+          addinURL: `${config.baseURL}/${tenant.instance}/taskpane.html`,
+        }),
+        new CopyWebpackPlugin([{ 
+          to: 'assets', 
+          from: './assets', 
+          ignore: ['*.scss'] 
+        }]),
+        new webpack.ProvidePlugin({
+          Promise: ["es6-promise", "Promise"]
+        })
+      ],
+      devServer: {
+        headers: {
+          "Access-Control-Allow-Origin": "*"
+        },      
+        https: false,
+        port: process.env.npm_package_config_dev_server_port || 3000
+      }
+    };
+  });
+}
