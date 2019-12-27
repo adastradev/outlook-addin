@@ -15,9 +15,8 @@ module.exports = async (env, argv) => {
   console.log('Retrieving configuration');
   await s3.getObject(
     {
-      // TODO Get this from options
-      Bucket: env.bucket_name, // 'astra-outlook-addin',
-      Key: env.bucket_key // 'tenant_configuration.json'
+      Bucket: env.bucket_name,
+      Key: env.bucket_key
     }, 
     (err, data) => {
       if (err) {
