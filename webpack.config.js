@@ -51,7 +51,7 @@ module.exports = async (env, argv) => {
         extensions: ['.ts', '.tsx', '.html', '.js'],
       },
       output: {
-        path: path.resolve(__dirname, `dist/${tenant.instance}`)
+        path: path.resolve(__dirname, `dist/${tenant.addinId}`)
       },
       module: {
         rules: [
@@ -99,7 +99,7 @@ module.exports = async (env, argv) => {
           filename: 'manifest.xml',
           template: './manifest-template.xml',
           addinId: tenant.addinId,
-          addinURL: `${config.baseURL}/${tenant.instance}/taskpane.html`,
+          addinURL: `${config.baseURL}/${tenant.addinId}/taskpane.html`,
         }),
         new CopyWebpackPlugin([{ 
           to: 'assets', 
