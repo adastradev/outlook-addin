@@ -15,7 +15,7 @@ module.exports = async (env, argv) => {
   console.log(`Retrieving configuration for bucket ${env.bucket_name} and key ${env.bucket_key}`);
   await s3.getObject(
     {
-      Bucket: env.bucket_name,
+      // Bucket: env.bucket_name,
       Key: env.bucket_key
     }, 
     (err, data) => {
