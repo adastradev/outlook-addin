@@ -12,7 +12,7 @@ module.exports = async (env, argv) => {
 
   let config = {};
 
-  console.log('Retrieving configuration');
+  console.log(`Retrieving configuration for bucket ${env.bucket_name} and key ${env.bucket_key}`);
   await s3.getObject(
     {
       Bucket: env.bucket_name,
