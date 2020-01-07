@@ -23,6 +23,7 @@ module.exports = (env, argv) => {
         console.error('Failed to retrieve configuration');
         console.error(err, err.stack);
       } else {
+        console.log(`Retrieved S3 object: ${data.Body.toString()}`);
         config = JSON.parse(data.Body.toString());
       }
     }
