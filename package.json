@@ -12,8 +12,8 @@
     "dev-server-port": 3000
   },
   "scripts": {
-    "build": "node --max-old-space-size=4096 node_modules/webpack/bin/webpack -p --mode production --https false --env.bucket_name $CONFIG_BUCKET_NAME --env.bucket_key $CONFIG_BUCKET_KEY --env.bucket_region $CONFIG_BUCKET_REGION",
-    "build:dev": "node --max-old-space-size=4096 node_modules/webpack/bin/webpack --mode development --https false --env.bucket_name $CONFIG_BUCKET_NAME --env.bucket_key $CONFIG_BUCKET_KEY --env.bucket_region $CONFIG_BUCKET_REGION",
+    "build": "node --max-old-space-size=8192 node_modules/webpack/bin/webpack -p --mode production --https false --env.bucket_name $CONFIG_BUCKET_NAME --env.bucket_key $CONFIG_BUCKET_KEY --env.bucket_region $CONFIG_BUCKET_REGION",
+    "build:dev": "node --max-old-space-size=8192 node_modules/webpack/bin/webpack --mode development --https false --env.bucket_name $CONFIG_BUCKET_NAME --env.bucket_key $CONFIG_BUCKET_KEY --env.bucket_region $CONFIG_BUCKET_REGION",
     "build-dev": "webpack --mode development --https false && echo . && echo . && echo . && echo Please use 'build:dev' instead of 'build-dev'.",
     "dev-server": "webpack-dev-server --mode development",
     "start": "office-addin-debugging start manifest.xml",
