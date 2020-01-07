@@ -20,13 +20,13 @@ module.exports = async (env, argv) => {
     }
   ).promise();
 
-  config = response.Body.toString();
+  config = JSON.parse(response.Body.toString());
   
   if(config.tenants !== undefined) {
     console.log(`Retrieved configuration: ${JSON.stringify(config)}`);
   } else {
     console.log('Failed to retrieve configuration');
-    console.log(JSON.stringify(response));
+    console.log(response.Body.toString());
   }
 
   return config.tenants.map((tenant) => {   
