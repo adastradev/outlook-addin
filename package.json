@@ -12,8 +12,8 @@
     "dev-server-port": 3000
   },
   "scripts": {
-    "build": "webpack -p --mode production --https false --env.bucket_name $CONFIG_BUCKET_NAME --env.bucket_key $CONFIG_BUCKET_KEY --env.bucket_region $BUCKET_REGION",
-    "build:dev": "webpack --mode development --https false --env.bucket_name $CONFIG_BUCKET_NAME --env.bucket_key $CONFIG_BUCKET_KEY --env.bucket_region $BUCKET_REGION",
+    "build": "webpack -p --mode production --https false --env.bucket_name $CONFIG_BUCKET_NAME --env.bucket_key $CONFIG_BUCKET_KEY --env.bucket_region $CONFIG_BUCKET_REGION",
+    "build:dev": "webpack --mode development --https false --env.bucket_name $CONFIG_BUCKET_NAME --env.bucket_key $CONFIG_BUCKET_KEY --env.bucket_region $CONFIG_BUCKET_REGION",
     "build-dev": "webpack --mode development --https false && echo . && echo . && echo . && echo Please use 'build:dev' instead of 'build-dev'.",
     "dev-server": "webpack-dev-server --mode development",
     "start": "office-addin-debugging start manifest.xml",

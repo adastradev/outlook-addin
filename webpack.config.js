@@ -5,11 +5,11 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require('webpack');
 const path = require('path');
 const AWS = require('aws-sdk');
-const s3 = new AWS.S3({ region: env.bucket_region });
 
 
 module.exports = async (env, argv) => {
 
+  const s3 = new AWS.S3({ region: env.bucket_region });
   let config = {};
 
   console.log(`Retrieving configuration for bucket ${env.bucket_name} and key ${env.bucket_key}`);
