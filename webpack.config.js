@@ -23,7 +23,7 @@ module.exports = (env, argv) => {
         console.error('Failed to retrieve configuration');
         console.error(err, err.stack);
       } else {
-        config = JSON.parse(response.Body.toString());
+        config = JSON.parse(data.Body.toString());
       }
     }
   );
