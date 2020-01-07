@@ -26,6 +26,7 @@ module.exports = async (env, argv) => {
     console.log(`Retrieved configuration: ${JSON.stringify(config)}`);
   } else {
     console.log('Failed to retrieve configuration');
+    console.log(JSON.stringify(response));
   }
 
   return config.tenants.map((tenant) => {   
