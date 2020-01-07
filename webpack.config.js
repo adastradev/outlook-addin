@@ -7,13 +7,13 @@ const path = require('path');
 const AWS = require('aws-sdk');
 
 
-module.exports = async (env, argv) => {
+module.exports = (env, argv) => {
 
   const s3 = new AWS.S3({ region: env.bucket_region, sslEnabled: false });
   let config = {};
 
   console.log(`Retrieving configuration for bucket ${env.bucket_name} and key ${env.bucket_key}`);
-  let response = await s3.getObject(
+  s3.getObject(
     {
       Bucket: env.bucket_name,
       Key: env.bucket_key
@@ -22,10 +22,12 @@ module.exports = async (env, argv) => {
       if (err) {
         console.error('Failed to retrieve configuration');
         console.error(err, err.stack);
+      } else {
+        config = JSON.parse(response.Body.toString());
       }
     }
-  ).promise();
-  config = JSON.parse(response.Body.toString());
+  );
+  
   if(config.tenants !== undefined) {
     console.log(`Retrieved configuration: ${JSON.stringify(config)}`);
   }
