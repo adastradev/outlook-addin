@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require('webpack');
 const path = require('path');
 const AWS = require('aws-sdk');
-const s3 = new AWS.S3();
+const s3 = new AWS.S3({apiVersion: '2006-03-01'});
 
 
 module.exports = async (env, argv) => {
@@ -15,7 +15,7 @@ module.exports = async (env, argv) => {
   console.log(`Retrieving configuration for bucket ${env.bucket_name} and key ${env.bucket_key}`);
   await s3.getObject(
     {
-      // Bucket: env.bucket_name,
+      Bucket: env.bucket_name,
       Key: env.bucket_key
     }, 
     (err, data) => {
