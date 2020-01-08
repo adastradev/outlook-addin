@@ -32,7 +32,6 @@ module.exports = async (env, argv) => {
   return config.tenants.map((tenant) => {   
     return {
       name: tenant.instance,
-      devtool: 'source-map',
       entry: {
         vendor: [
           'react',
@@ -45,7 +44,7 @@ module.exports = async (env, argv) => {
             './src/taskpane/index.tsx',
         ],
       },
-        resolve: {
+      resolve: {
         extensions: ['.ts', '.tsx', '.html', '.js'],
       },
       output: {
