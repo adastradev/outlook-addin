@@ -97,6 +97,7 @@ module.exports = async (env, argv) => {
           template: './manifest-template.xml',
           addinId: tenant.addinId,
           addinURL: `${config.baseURL}/${tenant.addinId}/taskpane.html`,
+          inject: false
         }),
         new CopyWebpackPlugin([{ 
           to: 'assets', 
