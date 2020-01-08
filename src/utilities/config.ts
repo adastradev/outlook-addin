@@ -1,7 +1,14 @@
+// These values will be inlined using the DefinePlugin in webpack, but TS needs the declaration
+declare var __API_BASE_PATH__: string;
+declare var __SCHEDULE_BASE_PATH__: string;
+declare var __ADDIN_ID__: string;
+
 const _defaultSettings = {
   showWelcomeScreen: 2, // 1 = never, 2 = next time, 3 = always
   useSampleData: false,
-  apiBasePath: 'https://bcxb69ay5h.execute-api.us-east-1.amazonaws.com/v0-prod',
+  apiBasePath: __API_BASE_PATH__,
+  astraScheduleBasePath: __SCHEDULE_BASE_PATH__,
+  addinId: __ADDIN_ID__
 }
 
 export const WELCOME_SCREEN_SETTTING = 'adastra.demo.showWelcomeScreen';

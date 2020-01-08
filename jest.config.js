@@ -3,6 +3,9 @@ module.exports = {
     roots: ['src/'],
     moduleFileExtensions: ['ts', 'tsx', 'js'],
     globals: {
+      '__API_BASE_PATH__': '',
+      '__SCHEDULE_BASE_PATH__': '',
+      '__ADDIN_ID__': '',
       'ts-jest': {
         tsConfig: 'tsconfig.json',
       },
