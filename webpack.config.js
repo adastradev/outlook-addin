@@ -80,7 +80,8 @@ module.exports = async (env, argv) => {
         new webpack.DefinePlugin({
           __ADDIN_ID__: JSON.stringify(tenant.addinId),
           __API_BASE_PATH__: JSON.stringify(tenant.bridgeURL),
-          __SCHEDULE_BASE_PATH__: JSON.stringify(config.baseScheduleURL)
+          __SCHEDULE_BASE_PATH__: JSON.stringify(config.baseScheduleURL),
+          __SCHEDULE_INSTANCE__: JSON.stringify(tenant.instance)
         }),
         new CopyWebpackPlugin([{ 
           to: 'taskpane.css', 
