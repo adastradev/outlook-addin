@@ -5,6 +5,7 @@ module.exports = {
     globals: {
       '__API_BASE_PATH__': '',
       '__SCHEDULE_BASE_PATH__': '',
+      '__SCHEDULE_INSTANCE__': '',
       '__ADDIN_ID__': '',
       'ts-jest': {
         tsConfig: 'tsconfig.json',
