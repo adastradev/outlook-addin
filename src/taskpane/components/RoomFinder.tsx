@@ -15,7 +15,7 @@ import {
 } from 'office-ui-fabric-react';
 import moment from 'moment';
 import SettingsDialog from './SettingsDialog';
-import { SELECTED_ROOM_SETTING } from '../../utilities/config';
+import { SELECTED_ROOM_SETTING, getDefaultSettings } from '../../utilities/config';
 import { ISourceRoomInfo } from './DetailedRoomButton';
 
 const stackStyles: IStackStyles = {
@@ -184,8 +184,8 @@ export default class RoomFinder extends React.Component<IRoomFinderProps, IRoomF
     
           // set event url to postResponse.data.eventId
           const eventId = postResponse.data.event_id;
-          const astraScheduleInstanceUrl = `https://www.aaiscloud.com/ARCHealthEducation`;
-          const astraScheduleEventUrl = `${astraScheduleInstanceUrl}/events/EventForm.aspx?id=${eventId}`;
+          const config = getDefaultSettings();
+          const astraScheduleEventUrl = `${config.astraScheduleBasePath}/${config.astraScheduleInstance}/events/EventForm.aspx?id=${eventId}`;
     
           that.setState({
             ...that.state,

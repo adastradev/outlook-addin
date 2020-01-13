@@ -1,6 +1,7 @@
 // These values will be inlined using the DefinePlugin in webpack, but TS needs the declaration
 declare var __API_BASE_PATH__: string;
 declare var __SCHEDULE_BASE_PATH__: string;
+declare var __SCHEDULE_INSTANCE__: string;
 declare var __ADDIN_ID__: string;
 
 const _defaultSettings = {
@@ -8,6 +9,7 @@ const _defaultSettings = {
   useSampleData: false,
   apiBasePath: __API_BASE_PATH__,
   astraScheduleBasePath: __SCHEDULE_BASE_PATH__,
+  astraScheduleInstance: __SCHEDULE_INSTANCE__,
   addinId: __ADDIN_ID__
 }
 
