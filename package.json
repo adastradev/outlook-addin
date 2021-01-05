@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "aws-sdk": "^2.596.0",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "axios-mock-adapter": "^1.17.0",
     "core-js": "^3.1.4",
     "enzyme-async-helpers": "^0.9.1",
